@@ -1,0 +1,761 @@
+
+	import java.io.File;
+	import java.io.FileNotFoundException;
+	import java.util.Random;
+	import java.util.Scanner;
+
+	public class InterCovidData2 {
+		//The following are global fields that will parse data throughout all of the methods
+		
+		//establishes the nodes of each coordinate
+		static int NodeA[] = new int [31684];
+		static int NodeB[] = new int [31684];
+		 
+		//Parses calculated distances of the three groups
+		static double Center_1[] = new double[31684];
+		static double Center_2[] = new double[31684];
+		static double Center_3[] = new double[31684];
+		static double distance = 0;
+		static int select = 0;
+		
+		static double temp[] = new double[31684]; //will be used to store A[i] of previous iteration
+		static double A[] = new double[31684];
+		//Temporarily stores distances
+		static double x1_D1[] = new double[31684];
+		static double y1_D1[] = new double[31684];
+		static double w1_D1[] = new double[31684];
+		static double z1_D1[] = new double[31684];
+		static double g1_D1[] = new double[31684];
+		static double h1_D1[] = new double[31684];
+		static double i1_D1[] = new double[31684];
+		static double j1_D1[] = new double[31684];
+		static double k1_D1[] = new double[31684];
+		static double l1_D1[] = new double[31684];
+		static double m1_D1[] = new double[31684];
+		static double n1_D1[] = new double[31684];
+		static double o1_D1[] = new double[31684];
+		static double p1_D1[] = new double[31684];
+		
+		//used to parse the new center value
+		static double S1_D1[] = new double[3];
+		static double T1_D1[] = new double[3];
+		static double E1_D1[] = new double[3];
+		static double V1_D1[] = new double[3];
+		static double N1_D1[] = new double[3];
+		static double F1_D1[] = new double[3];
+		static double Q1_D1[] = new double[3];
+		static double U1_D1[] = new double[3];
+		static double A1_D1[] = new double[3];
+		static double L1_D1[] = new double[3];
+		static double I1_D1[] = new double[3];
+		static double Z1_D1[] = new double[3];
+		static double X1_D1[] = new double[3];
+		static double R1_D1[] = new double[3];
+		
+		//Stores initialized coordinates
+		static double Init_x1_D1[] = new double[31684];
+		static double Init_y1_D1[] = new double[31684];
+		static double Init_w1_D1[] = new double[31684];
+		static double Init_z1_D1[] = new double[31684];
+		static double Init_g1_D1[] = new double[31684];
+		static double Init_h1_D1[] = new double[31684];
+		static double Init_i1_D1[] = new double[31684];
+		static double Init_j1_D1[] = new double[31684];
+		static double Init_k1_D1[] = new double[31684];
+		static double Init_l1_D1[] = new double[31684];
+		static double Init_m1_D1[] = new double[31684];
+		static double Init_n1_D1[] = new double[31684];
+		static double Init_o1_D1[] = new double[31684];
+		static double Init_p1_D1[] = new double[31684];
+				
+		//Dimensions for Group 1
+		static double x1_G1[] = new double[31684];
+		static double y1_G1[] = new double[31684];
+		static double w1_G1[] = new double[31684];
+		static double z1_G1[] = new double[31684];
+		static double g1_G1[] = new double[31684];
+		static double h1_G1[] = new double[31684];
+		static double i1_G1[] = new double[31684];
+		static double j1_G1[] = new double[31684];
+		static double k1_G1[] = new double[31684];
+		static double l1_G1[] = new double[31684];
+		static double m1_G1[] = new double[31684];
+		static double n1_G1[] = new double[31684];
+		static double o1_G1[] = new double[31684];
+		static double p1_G1[] = new double[31684];
+		
+		//Dimensions for Group 2
+		static double x1_G2[] = new double[31684];
+		static double y1_G2[] = new double[31684];
+		static double w1_G2[] = new double[31684];
+		static double z1_G2[] = new double[31684];
+		static double g1_G2[] = new double[31684];
+		static double h1_G2[] = new double[31684];
+		static double i1_G2[] = new double[31684];
+		static double j1_G2[] = new double[31684];
+		static double k1_G2[] = new double[31684];
+		static double l1_G2[] = new double[31684];
+		static double m1_G2[] = new double[31684];
+		static double n1_G2[] = new double[31684];
+		static double o1_G2[] = new double[31684];
+		static double p1_G2[] = new double[31684];
+	
+		//Dimensions for Group 3
+		static double x1_G3[] = new double[31684];
+		static double y1_G3[] = new double[31684];
+		static double w1_G3[] = new double[31684];
+		static double z1_G3[] = new double[31684];
+		static double g1_G3[] = new double[31684];
+		static double h1_G3[] = new double[31684];
+		static double i1_G3[] = new double[31684];
+		static double j1_G3[] = new double[31684];
+		static double k1_G3[] = new double[31684];
+		static double l1_G3[] = new double[31684];
+		static double m1_G3[] = new double[31684];
+		static double n1_G3[] = new double[31684];
+		static double o1_G3[] = new double[31684];
+		static double p1_G3[] = new double[31684];
+	
+		//keeps count of the iterations
+		static int iterations = 0;
+		static int temp_iterations = -1;
+		
+		//used to store amount of centers of previous iteration
+		static int temp1 = 0;
+		static int temp2 = 0;
+		static int temp3 = 0;
+		
+		static int counter1 = 0;
+		static int counter2 = 0;
+		static int counter3 = 0;
+		
+		static boolean condition = false; //used to break loop when A[] is equal to previous iteration
+		
+		//------------------------------------------------------------------------------------
+		
+		//Initializes the first 100 values with random lines and calculate the distance between the center values
+		public static void Distance1() throws FileNotFoundException 
+		{
+			double Manhattan_1; //used to store the distance
+			double Manhattan_2; //used to store the distance
+			double Manhattan_3; //used to store the distance
+			int nodeB = 0;
+			int nodeA = 0;
+			
+			//create a string that will read data file, Data2.txt
+			String fileName1 = "Data2.txt";
+			File file1 = new File(fileName1);
+			Scanner inputStream = new Scanner(file1);
+			
+			String result = null;
+			 int x = 0;
+			 int c = 0;
+			
+			 Random rand = new Random();
+
+			 final int Max_Rand = 15;
+			 final int Min_Rand = 0;
+			 int random = 0;
+			 int count = 0;
+			// int center = 1;
+			//Here the initialization of the centers takes place
+			while(inputStream.hasNext())
+			{		
+				
+				c++;
+				random = ((int) (Math.random() * (Max_Rand - Min_Rand +1))) + Min_Rand;
+				
+				//saves each line in to the values array and removes the ,  
+				String data = inputStream.nextLine();
+				
+				//Initialize centers with random lines from the file Data1.txt
+				if(rand.nextInt(c) > 13  || rand.nextInt(c) == random )
+				{
+				
+					result = data;
+					String values_Data1[] = result.split(",");
+					x1_D1[x] = Double.parseDouble(values_Data1[0]);
+					y1_D1[x] = Double.parseDouble(values_Data1[1]);
+					w1_D1[x] = Double.parseDouble(values_Data1[2]);
+					z1_D1[x] = Double.parseDouble(values_Data1[3]);
+					g1_D1[x] = Double.parseDouble(values_Data1[4]);
+					h1_D1[x] = Double.parseDouble(values_Data1[5]);
+					i1_D1[x] = Double.parseDouble(values_Data1[6]);
+					j1_D1[x] = Double.parseDouble(values_Data1[7]);
+					k1_D1[x] = Double.parseDouble(values_Data1[8]);
+					l1_D1[x] = Double.parseDouble(values_Data1[9]);
+				    m1_D1[x] = Double.parseDouble(values_Data1[10]);
+				    n1_D1[x] = Double.parseDouble(values_Data1[11]);
+					o1_D1[x] = Double.parseDouble(values_Data1[12]);
+					p1_D1[x] = Double.parseDouble(values_Data1[13]);
+					
+					if(iterations == 0)
+					{
+						Init_x1_D1[0] = x1_D1[0];
+					    Init_y1_D1[0] = y1_D1[0];
+						Init_w1_D1[0] = w1_D1[0];
+						Init_z1_D1[0] = z1_D1[0];
+						Init_g1_D1[0] = g1_D1[0];
+						Init_h1_D1[0] =h1_D1[0];
+						Init_i1_D1[0] =i1_D1[0];
+						Init_j1_D1[0] =j1_D1[0];
+						Init_k1_D1[0] =k1_D1[0];
+						Init_l1_D1[0] =l1_D1[0];
+						Init_m1_D1[0] = m1_D1[0];
+						Init_n1_D1[0] = n1_D1[0];
+						Init_o1_D1[0] =o1_D1[0];
+						Init_p1_D1[0] =p1_D1[0];
+					}
+					if(iterations >=1)
+					{
+						x1_D1[0] = S1_D1[0];
+						y1_D1[0] = T1_D1[0];
+						w1_D1[0] = V1_D1[0];
+						z1_D1[0] = E1_D1[0];
+						g1_D1[0] = N1_D1[0];
+						h1_D1[0] = F1_D1[0];
+						i1_D1[0] = Q1_D1[0];
+						j1_D1[0] = U1_D1[0];
+						k1_D1[0] = A1_D1[0];
+						l1_D1[0] = L1_D1[0];
+					    m1_D1[0] = I1_D1[0];
+					    n1_D1[0] = Z1_D1[0];
+						o1_D1[0] = X1_D1[0];
+						p1_D1[0] = R1_D1[0];
+						
+						x1_D1[1] = S1_D1[1];
+						y1_D1[1] = T1_D1[1];
+						w1_D1[1] = V1_D1[1];
+						z1_D1[1] = E1_D1[1];
+						g1_D1[1] = N1_D1[1];
+						h1_D1[1] = F1_D1[1];
+						i1_D1[1] = Q1_D1[1];
+						j1_D1[1] = U1_D1[1];
+						k1_D1[1] = A1_D1[1];
+						l1_D1[1] = L1_D1[1];
+					    m1_D1[1] = I1_D1[1];
+					    n1_D1[1] = Z1_D1[1];
+						o1_D1[1] = X1_D1[1];
+						p1_D1[1] = R1_D1[1];
+						
+						x1_D1[2] = S1_D1[2];
+						y1_D1[2] = T1_D1[2];
+						w1_D1[2] = V1_D1[2];
+						z1_D1[2] = E1_D1[2];
+						g1_D1[2] = N1_D1[2];
+						h1_D1[2] = F1_D1[2];
+						i1_D1[2] = Q1_D1[2];
+						j1_D1[2] = U1_D1[2];
+						k1_D1[2] = A1_D1[2];
+						l1_D1[2] = L1_D1[2];
+					    m1_D1[2] = I1_D1[2];
+					    n1_D1[2] = Z1_D1[2];
+						o1_D1[2] = X1_D1[2];
+						p1_D1[2] = R1_D1[2];
+					}
+					
+					
+					x++;
+
+				}
+				
+			}
+			
+			inputStream.close();
+			
+			
+			//This for loop calculates the distance of the centers with Manhattan formula
+			for(int i = 0; i < 178; i++)
+			{
+				for(int j = 0; j < 178; j++)
+				{ 
+					Manhattan_1 = Math.abs((x1_D1[0]-x1_D1[j])) + Math.abs((y1_D1[0] - y1_D1[j])) + 
+							Math.abs((w1_D1[0]-w1_D1[j])) + Math.abs((z1_D1[0]-z1_D1[j]))    + Math.abs((g1_D1[0]-g1_D1[j])
+									+ (h1_D1[0]-h1_D1[j])) + Math.abs((i1_D1[0]-i1_D1[j]))    + Math.abs((j1_D1[0]-j1_D1[j])
+									+ (k1_D1[0]-k1_D1[j])) + Math.abs((l1_D1[0]-l1_D1[j]))    + Math.abs((m1_D1[0]-m1_D1[j])
+									+ (n1_D1[0]-n1_D1[j])) + Math.abs((o1_D1[0]-o1_D1[j]))    + Math.abs((p1_D1[0]-p1_D1[j]));
+					
+					Manhattan_1 = Math.round(Manhattan_1*100.0)/100.0;
+					
+					
+					Manhattan_2 = Math.abs((x1_D1[1]-x1_D1[j])) + Math.abs((y1_D1[1] - y1_D1[j])) + 
+							Math.abs((w1_D1[1]-w1_D1[j])) + Math.abs((z1_D1[1]-z1_D1[j]))   + Math.abs((g1_D1[1]-g1_D1[j])
+									+ (h1_D1[0]-h1_D1[j])) + Math.abs((i1_D1[0]-i1_D1[j]))    + Math.abs((j1_D1[0]-j1_D1[j])
+									+ (k1_D1[0]-k1_D1[j])) + Math.abs((l1_D1[0]-l1_D1[j]))    + Math.abs((m1_D1[0]-m1_D1[j])
+									+ (n1_D1[0]-n1_D1[j])) + Math.abs((o1_D1[0]-o1_D1[j]))    + Math.abs((p1_D1[0]-p1_D1[j]));
+					
+					Manhattan_2 = Math.round(Manhattan_2*100.0)/100.0;
+					
+					
+					Manhattan_3 = Math.abs((x1_D1[2]-x1_D1[j])) + Math.abs((y1_D1[2] - y1_D1[j])) + 
+							Math.abs((w1_D1[2]-w1_D1[j])) + Math.abs((z1_D1[2]-z1_D1[j]))    + Math.abs((g1_D1[2]-g1_D1[j])
+									+ (h1_D1[0]-h1_D1[j])) + Math.abs((i1_D1[0]-i1_D1[j]))    + Math.abs((j1_D1[0]-j1_D1[j])
+									+ (k1_D1[0]-k1_D1[j])) + Math.abs((l1_D1[0]-l1_D1[j]))    + Math.abs((m1_D1[0]-m1_D1[j])
+									+ (n1_D1[0]-n1_D1[j])) + Math.abs((o1_D1[0]-o1_D1[j]))    + Math.abs((p1_D1[0]-p1_D1[j]));
+					
+					Manhattan_3 = Math.round(Manhattan_3*100.0)/100.0;
+					
+					nodeA = i;
+					nodeB = j;
+
+					//Parses the distance values calculated to one of the three groups
+					NodeA[count] = nodeA;
+					NodeB[count] = nodeB;
+					Center_1[count] = Manhattan_1;
+					Center_2[count] = Manhattan_2;
+					Center_3[count] = Manhattan_3;
+			
+					count++;
+				}
+			}
+			
+		}//end Distance1
+		
+
+		//-------------------------------------------------------------
+		
+		//Here we determine which groups the distances will be assigned, assuming there are 3 groups
+		public static void Join() throws FileNotFoundException
+		{
+			double Center1[] = new double[31684];
+			double Center2[] = new double[31684];
+			double Center3[] = new double[31684];
+			//double A[] = new double[100];
+			
+			Distance1();
+
+			if(temp_iterations < iterations)
+			{
+				//stores previous iterations of A[i] to temp[i]
+				for(int x = 0; x < 31684; x++)
+				{
+					temp[x] = A[x];
+					
+					if(temp[x] == 1)
+					{
+						temp1++;
+					}
+					else if(temp[x] == 2)
+					{
+						temp2++;
+					}
+					else if(temp[x] == 3)
+					{
+						temp3++;
+					}
+					
+				}
+		
+			}
+			
+			//Assigns Manhattan distances to Center1 array
+			for(int i = 0; i < 31684; i++)
+			{
+					Center1[i] = Center_1[i];
+			}
+			
+			//Assigns Manhattan distances to Center2 array
+			for(int i = 0; i < 31684; i++)
+			{
+				Center2[i] = Center_2[i];
+			}
+			
+			//Assigns Manhattan distances to Center3 array
+			for(int i = 0; i < 31684; i++)
+			{
+				Center3[i] = Center_3[i];
+			}
+			
+			 //Joining Centers for A[] matrix
+			for(int i = 0; i < 31684; i++)
+			{
+				if(Center1[i] < Center2[i] && Center1[i] < Center3[i])
+				{
+					distance = Center1[i];
+					select = 0;
+					A[i] = 1;
+					
+					x1_G1[i] = x1_D1[i];
+					y1_G1[i] = y1_D1[i];
+					w1_G1[i] = w1_D1[i];
+					z1_G1[i] = z1_D1[i];
+					g1_G1[i] = g1_D1[i];
+					h1_G1[i] = h1_D1[i];
+					i1_G1[i] = i1_D1[i];
+					j1_G1[i] = j1_D1[i];
+					k1_G1[i] = k1_D1[i];
+					l1_G1[i] = l1_D1[i];
+				    m1_G1[i] = m1_D1[i];
+				    n1_G1[i] = n1_D1[i];
+					o1_G1[i] = o1_D1[i];
+					p1_G1[i] = p1_D1[i];
+					counter1++;
+					
+				}
+				else if(Center2[i] < Center1[i] && Center2[i] < Center3[i])
+				{
+					distance = Center2[i];
+					select = 1;
+					A[i] = 2;
+					
+					x1_G2[i] = x1_D1[i];
+					y1_G2[i] = y1_D1[i];
+					w1_G2[i] = w1_D1[i];
+					z1_G2[i] = z1_D1[i];
+					g1_G2[i] = g1_D1[i];
+					h1_G2[i] = h1_D1[i];
+					i1_G2[i] = i1_D1[i];
+					j1_G2[i] = j1_D1[i];
+					k1_G2[i] = k1_D1[i];
+					l1_G2[i] = l1_D1[i];
+				    m1_G2[i] = m1_D1[i];
+				    n1_G2[i] = n1_D1[i];
+					o1_G2[i] = o1_D1[i];
+					p1_G2[i] = p1_D1[i];
+					counter2++;
+				}
+				else if(Center3[i] < Center1[i] && Center3[i] < Center2[i])
+				{
+					distance = Center3[i];
+					select = 2;
+					A[i] = 3;
+					
+					x1_G3[i] = x1_D1[i];
+					y1_G3[i] = y1_D1[i];
+					w1_G3[i] = w1_D1[i];
+					z1_G3[i] = z1_D1[i];
+					g1_G3[i] = g1_D1[i];
+					h1_G3[i] = h1_D1[i];
+					i1_G3[i] = i1_D1[i];
+					j1_G3[i] = j1_D1[i];
+					k1_G3[i] = k1_D1[i];
+					l1_G3[i] = l1_D1[i];
+				    m1_G3[i] = m1_D1[i];
+				    n1_G3[i] = n1_D1[i];
+					o1_G3[i] = o1_D1[i];
+					p1_G3[i] = p1_D1[i];
+					
+					counter3++;
+					
+				}
+		
+			}
+		}	//end Join method
+		
+		
+		//Here we find the average of the values assigned to A[]
+		public static void Average() throws FileNotFoundException
+		{
+			//Field arrays are meant to substitute original Center
+			double newX1_D1[] = new double[100];
+			double newY1_D1[] = new double[100];
+			double newW1_D1[] = new double[100];
+			double newZ1_D1[] = new double[100];
+			double newG1_D1[] = new double[100];
+			double newH1_D1[] = new double[100];
+			double newI1_D1[] = new double[100];
+			double newJ1_D1[] = new double[100];
+			double newK1_D1[] = new double[100];
+			double newL1_D1[] = new double[100];
+			double newM1_D1[] = new double[100];
+			double newN1_D1[] = new double[100];
+			double newO1_D1[] = new double[100];
+			double newP1_D1[] = new double[100];
+			
+			double sum_D1[] = new double[100];
+			double sum_D2[] = new double[100];
+			double sum_D3[] = new double[100];
+			double sum_D4[] = new double[100];
+			double sum_D5[] = new double[100];
+			double sum_D6[] = new double[100];
+			double sum_D7[] = new double[100];
+			double sum_D8[] = new double[100];
+			double sum_D9[] = new double[100];
+			double sum_D10[] = new double[100];
+			double sum_D11[] = new double[100];
+			double sum_D12[] = new double[100];
+			double sum_D13[] = new double[100];
+			double sum_D14[] = new double[100];
+			
+			//Executes 100 iterations
+			for(int i = 0; i<100; i++)
+			{	
+				
+				Join(); //Executes Join() method inside loop to determine centers and average
+							for(int x = 0; x < 100; x++)
+							{
+							//average of the center   
+							 sum_D1[0]+=x1_G1[x];
+							 sum_D2[0]+=y1_G1[x];
+							 sum_D3[0]+=w1_G1[x];
+							 sum_D4[0]+=z1_G1[x];
+							 sum_D5[0]+=g1_G1[x];
+							 sum_D6[0]+=h1_G1[x];
+							 sum_D7[0]+=i1_G1[x];
+							 sum_D8[0]+=j1_G1[x];
+							 sum_D9[0]+=k1_G1[x];
+							 sum_D10[0]+=l1_G1[x];
+							 sum_D11[0] +=m1_G1[x];
+							 sum_D12[0]+=n1_G1[x];
+							 sum_D13[0] +=o1_G1[x];
+							 sum_D14[0] +=p1_G1[x];
+									 
+									 
+							 sum_D1[1]+=x1_G2[x];
+							 sum_D2[1]+=y1_G2[x];
+							 sum_D3[1]+=w1_G2[x];
+							 sum_D4[1]+=z1_G2[x];
+							 sum_D5[1]+=g1_G2[x];
+							 sum_D6[1]+=h1_G2[x];
+							 sum_D7[1]+=i1_G2[x];
+							 sum_D8[1]+=j1_G2[x];
+							 sum_D9[1]+=k1_G2[x];
+							 sum_D10[1]+=l1_G2[x];
+							 sum_D11[1] +=m1_G2[x];
+							 sum_D12[1]+=n1_G2[x];
+							 sum_D13[1] +=o1_G2[x];
+							 sum_D14[1] +=p1_G2[x];
+							 
+							 
+							 sum_D1[2]+=x1_G3[x];
+							 sum_D2[2]+=y1_G3[x];
+							 sum_D3[2]+=w1_G3[x];
+							 sum_D4[2]+=z1_G3[x];
+							 sum_D5[2]+=g1_G3[x];
+							 sum_D6[2]+=h1_G3[x];
+							 sum_D7[2]+=i1_G3[x];
+							 sum_D8[2]+=j1_G3[x];
+							 sum_D9[2]+=k1_G3[x];
+							 sum_D10[2]+=l1_G3[x];
+							 sum_D11[2]+=m1_G3[x];
+							 sum_D12[2]+=n1_G3[x];
+							 sum_D13[2] +=o1_G3[x];
+							 sum_D14[2] +=p1_G3[x];
+							 
+							}
+							
+							//Calculates the average for the centers
+							newX1_D1[0] = (sum_D1[0]/counter1);
+							newY1_D1[0] = (sum_D2[0]/counter1);
+							newW1_D1[0] = (sum_D3[0]/counter1);
+							newZ1_D1[0] = (sum_D4[0]/counter1);
+							newG1_D1[0] = (sum_D5[0]/counter1);
+							newH1_D1[0] = (sum_D6[0]/counter1);
+						    newI1_D1[0] = (sum_D7[0]/counter1);
+							newJ1_D1[0] = (sum_D8[0]/counter1);
+							newK1_D1[0] = (sum_D9[0]/counter1);
+							newL1_D1[0] = (sum_D10[0]/counter1);
+							newM1_D1[0] = (sum_D11[0]/counter1);
+							newN1_D1[0] = (sum_D12[0]/counter1);
+							newO1_D1[0] = (sum_D13[0]/counter1);
+							newP1_D1[0] = (sum_D14[0]/counter1);
+							
+							newX1_D1[1] = (sum_D1[1]/counter1);
+							newY1_D1[1] = (sum_D2[1]/counter1);
+							newW1_D1[1] = (sum_D3[1]/counter1);
+							newZ1_D1[1] = (sum_D4[1]/counter1);
+							newG1_D1[1] = (sum_D5[1]/counter1);
+							newH1_D1[1] = (sum_D6[1]/counter1);
+						    newI1_D1[1] = (sum_D7[1]/counter1);
+							newJ1_D1[1] = (sum_D8[1]/counter1);
+							newK1_D1[1] = (sum_D9[1]/counter1);
+							newL1_D1[1] = (sum_D10[1]/counter1);
+							newM1_D1[1] = (sum_D11[1]/counter1);
+							newN1_D1[1] = (sum_D12[1]/counter1);
+							newO1_D1[1] = (sum_D13[1]/counter1);
+							newP1_D1[1] = (sum_D14[1]/counter1);
+							
+							newX1_D1[2] = (sum_D1[2]/counter1);
+							newY1_D1[2] = (sum_D2[2]/counter1);
+							newW1_D1[2] = (sum_D3[2]/counter1);
+							newZ1_D1[2] = (sum_D4[2]/counter1);
+							newG1_D1[2] = (sum_D5[2]/counter1);
+							newH1_D1[2] = (sum_D6[2]/counter1);
+						    newI1_D1[2] = (sum_D7[2]/counter1);
+							newJ1_D1[2] = (sum_D8[2]/counter1);
+							newK1_D1[2] = (sum_D9[2]/counter1);
+							newL1_D1[2] = (sum_D10[2]/counter1);
+							newM1_D1[2] = (sum_D11[2]/counter1);
+							newN1_D1[2] = (sum_D12[2]/counter1);
+							newO1_D1[2] = (sum_D13[2]/counter1);
+							newP1_D1[2] = (sum_D14[2]/counter1);
+							
+						//In charge of reassigning new centers in next iteration
+							x1_D1[0] = newX1_D1[0];
+							y1_D1[0] = newY1_D1[0];
+							w1_D1[0] = newW1_D1[0];
+							z1_D1[0] = newZ1_D1[0];
+							g1_D1[0] = newG1_D1[0];
+							h1_D1[0] = newH1_D1[0];
+							i1_D1[0] = newI1_D1[0];
+							j1_D1[0] = newJ1_D1[0];
+							k1_D1[0] = newK1_D1[0];
+							l1_D1[0] = newL1_D1[0];
+							m1_D1[0] = newM1_D1[0];
+							n1_D1[0] = newN1_D1[0];
+							o1_D1[0] = newO1_D1[0];
+							p1_D1[0] = newP1_D1[0];
+							
+							x1_D1[1] = newX1_D1[1];
+							y1_D1[1] = newY1_D1[1];
+							w1_D1[1] = newW1_D1[1];
+							z1_D1[1] = newZ1_D1[1];
+							g1_D1[1] = newG1_D1[1];
+							h1_D1[1] = newH1_D1[1];
+							i1_D1[1] = newI1_D1[1];
+							j1_D1[1] = newJ1_D1[1];
+							k1_D1[1] = newK1_D1[1];
+							l1_D1[1] = newL1_D1[1];
+							m1_D1[1] = newM1_D1[1];
+							n1_D1[1] = newN1_D1[1];
+							o1_D1[1] = newO1_D1[1];
+							p1_D1[1] = newP1_D1[1];
+							
+							x1_D1[2] = newX1_D1[2];
+							y1_D1[2] = newY1_D1[2];
+							w1_D1[2] = newW1_D1[2];
+							z1_D1[2] = newZ1_D1[2];
+							g1_D1[2] = newG1_D1[2];
+							h1_D1[2] = newH1_D1[2];
+							i1_D1[2] = newI1_D1[2];
+							j1_D1[2] = newJ1_D1[2];
+							k1_D1[2] = newK1_D1[2];
+							l1_D1[2] = newL1_D1[2];
+							m1_D1[2] = newM1_D1[2];
+							n1_D1[2] = newN1_D1[2];
+							o1_D1[2] = newO1_D1[2];
+							p1_D1[2] = newP1_D1[2];
+							
+							S1_D1[0] = x1_D1[0];
+							T1_D1[0] = y1_D1[0];
+							E1_D1[0] = w1_D1[0];
+							V1_D1[0] = z1_D1[0];
+							N1_D1[0] = g1_D1[0];
+							F1_D1[0] = h1_D1[0];
+							Q1_D1[0] = i1_D1[0];
+							U1_D1[0] = j1_D1[0];
+							A1_D1[0] = k1_D1[0];
+							L1_D1[0] = l1_D1[0];
+							I1_D1[0] = m1_D1[0];
+							Z1_D1[0] = n1_D1[0];
+							X1_D1[0] = o1_D1[0];
+							R1_D1[0] = p1_D1[0];
+							
+							S1_D1[1] = x1_D1[1];
+							T1_D1[1] = y1_D1[1];
+							E1_D1[1] = w1_D1[1];
+							V1_D1[1] = z1_D1[1];
+							N1_D1[1] = g1_D1[1];
+							F1_D1[1] = h1_D1[1];
+							Q1_D1[1] = i1_D1[1];
+							U1_D1[1] = j1_D1[1];
+							A1_D1[1] = k1_D1[1];
+							L1_D1[1] = l1_D1[1];
+							I1_D1[1] = m1_D1[1];
+							Z1_D1[1] = n1_D1[1];
+							X1_D1[1] = o1_D1[1];
+							R1_D1[1] = p1_D1[1];
+							
+							S1_D1[2] = x1_D1[2];
+							T1_D1[2] = y1_D1[2];
+							E1_D1[2] = w1_D1[2];
+							V1_D1[2] = z1_D1[2];
+							N1_D1[2] = g1_D1[2];
+							F1_D1[2] = h1_D1[2];
+							Q1_D1[2] = i1_D1[2];
+							U1_D1[2] = j1_D1[2];
+							A1_D1[2] = k1_D1[2];
+							L1_D1[2] = l1_D1[2];
+							I1_D1[2] = m1_D1[2];
+							Z1_D1[2] = n1_D1[2];
+							X1_D1[2] = o1_D1[2];
+							R1_D1[2] = p1_D1[2];
+							
+				
+				Accuracy(); //determines if A[] is equal to the previous array iterations
+				
+			
+				//Breks loop if equal to last iteration
+				if(condition == true)
+				{
+					break;
+				}
+			
+				counter1 = 0;
+				counter2 = 0;
+				counter3 = 0;
+				iterations++;
+				
+				
+				temp_iterations++; //test variable to see if it works
+				temp1 = 0;
+				temp2 = 0;
+				temp3 = 0;
+						
+			}	
+		}//end Average method
+		
+		//This method determines the accuracy of the File
+		public static void Accuracy() throws FileNotFoundException
+		{
+			boolean equals = false;
+			double accuracy = 0;
+			double equalsCounter = 0;
+			
+			
+				if(temp1 == counter1 && temp2 == counter2 && temp3 == counter3)
+				{
+					equals = true;
+				}
+			
+			
+			if(equals == true)
+			{
+				System.out.println("Data2.txt:");
+				System.out.println("Its equal to the last iteration");
+				for(int i = 0; i < 31684; i++)
+				{
+					if(A[i] == p1_D1[i])
+					{
+						equalsCounter++;
+					}
+					
+				}
+				
+				accuracy = equalsCounter/100;
+				
+				System.out.println("Initialization: " + Init_x1_D1[0] + ", " + Init_y1_D1[0] + ", " + Init_w1_D1[0] + ", " + Init_z1_D1[0] + ", " + Init_g1_D1[0]
+						+ Init_h1_D1[0] + ", " + Init_i1_D1[0] + ", " + Init_j1_D1[0] + ", " + Init_k1_D1[0] + ", " + Init_l1_D1[0]
+						+ Init_m1_D1[0] + ", " + Init_n1_D1[0] + ", " + Init_o1_D1[0] + ", " + Init_p1_D1[0]);
+				System.out.println("Average: " + S1_D1[select] + ", " +  T1_D1[select] + ", " +  E1_D1[select] + ", " +  V1_D1[select] + ", " + N1_D1[select]);
+						System.out.println(F1_D1[0] + ", " + Q1_D1[0] + ", " + U1_D1[0] + ", " + A1_D1[0] + ", " + L1_D1[0] + ",");
+						System.out.println(I1_D1[0] + ", " + Z1_D1[0] + ", " + X1_D1[0] + ", " + R1_D1[0]);
+				System.out.println("The distance is:" + distance);
+				System.out.println("The accuracy of Data2.txt is: " + accuracy);
+				System.out.println("Iterations: "+ iterations);
+				condition = true;
+				System.out.println("____________________________________________________");
+			}
+			else if(equals == false && iterations == 99)  
+			{
+				System.out.println("It is not equal");
+				
+				for(int i = 0; i < 31684; i++)
+				{
+					if(A[i] == p1_D1[i])
+					{
+						equalsCounter++;
+					}
+					
+				}
+				
+				accuracy = equalsCounter/100;
+				System.out.println("The accuracy of Data2.txt is: " + accuracy);
+				condition = true;
+				System.out.println("____________________________________________________");
+			}		
+		}//end Accuracy method	
+		
+	}//end class
+
+
